@@ -1,0 +1,39 @@
+<md-card id="widgetFeed">
+  <md-card-header style="min-height: 40px;">
+    <md-card-avatar>
+      <md-icon md-font-set="material-icons"> view_list</md-icon>
+    </md-card-avatar>
+    <md-card-header-text>
+      <span class="md-title">Live Feed</span>
+      <span class="md-subhead">Live Feedback von Twitter und Development-Updates.</span>
+    </md-card-header-text>
+    <md-button class="md-icon-button" aria-label="Delete Widget" ng-click="deleteWidget()" ng-show="editMode">
+      <md-icon md-font-set="material-icons"> clear</md-icon>
+      <md-tooltip md-direction="bottom">Delete Widget</md-tooltip>
+    </md-button>
+  </md-card-header>
+  <md-divider></md-divider>
+  <md-card-actions layout="row" layout-align="center center">
+    <div flex="80" align="right">
+      <input ng-model="feedback" placeholder="Tell us what you think" style="width: 100%;" />
+    </div>
+    <div flex="20">
+      <md-button ng-click="postFeedback()" class="md-icon-button" id="chatAdd" aria-label="Submit Feedback">
+        <md-tooltip md-direction="bottom">Submit Feedback</md-tooltip>
+        <md-icon md-font-set="material-icons"> send</md-icon>
+      </md-button>
+    </div>
+  </md-card-actions>
+  <md-divider></md-divider>
+  <md-progress-linear md-mode="{{ spinnerWidget }}"></md-progress-linear>
+  <md-card-content style="overflow-y: scroll; height: 100%;">
+    <md-list>
+      <md-list-item class="md-1-line" ng-repeat="e in feed | orderBy: '-timestamp'">
+        <div class="md-list-item-text">
+           <div ng-bind-html="format(e)"></div>
+        </div>
+        <md-divider ng-if="!$last"></md-divider>
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+</md-card>

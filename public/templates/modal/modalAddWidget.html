@@ -1,0 +1,19 @@
+
+<md-dialog layout-padding>
+    <md-dialog-content style="width: 500px; height: 350px">
+        <h3 class="md-headline">Widget hinzufügen</h3>
+
+        <div layout="row" layout-wrap>
+            <div flex="50" class="clickable"
+                 ng-repeat="widget in widgetsAdd" ng-click="select(widget.widget)">
+                <md-icon md-font-set="material-icons" style="font-size: 24px"> {{widget.icon}}</md-icon>
+                <span md-highlight-flags="^i" style="font-size: 24px">{{widget.name}}</span>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button ng-click="close()" class="md-primary">
+            Close
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

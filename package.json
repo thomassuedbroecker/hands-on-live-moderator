@@ -1,0 +1,19 @@
+{
+  "name": "dashboard",
+  "description": "dashboard for the cebit demopoint.",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "lite": "node_modules/lite-server/bin/lite-server",
+    "postinstall": "node_modules/bower/bin/bower install"
+  },
+  "dependencies": {
+    "express": "*",
+    "cfenv": "*",
+    "bower": "*",
+    "lite-server": "*",
+    "body-parser": "^1.15.2",
+    "watson-developer-cloud": "^2.8.1"
+  }
+}

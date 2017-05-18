@@ -1,0 +1,42 @@
+<md-card id="widgetChat">
+    <md-card-header style="min-height: 40px;">
+        <md-card-avatar>
+            <md-icon md-font-set="material-icons"> chat</md-icon>
+        </md-card-avatar>
+        <md-card-header-text>
+            <span class="md-title">Chatbot</span>
+            <span class="md-subhead">Chat with our Watson Chatbot.</span>
+        </md-card-header-text>
+        <md-button class="md-icon-button" aria-label="Delete Widget" ng-click="deleteWidget()" ng-show="editMode">
+            <md-icon md-font-set="material-icons"> clear</md-icon>
+            <md-tooltip md-direction="bottom">Widget löschen</md-tooltip>
+        </md-button>
+    </md-card-header>
+    <md-divider></md-divider>
+    <md-card-actions layout="row" layout-align="center center">
+        <div flex="80" align="right">
+            <input ng-model="name" placeholder="new Message" style="width: 100%;">
+        </div>
+        <div flex="20">
+            <md-button ng-click="submit()" class="md-icon-button" id="chatAdd" aria-label="Add message">
+                <md-tooltip md-direction="bottom">submit message</md-tooltip>
+                <md-icon md-font-set="material-icons"> send</md-icon>
+            </md-button>
+        </div>
+    </md-card-actions>
+    <md-divider></md-divider>
+    <md-progress-linear md-mode="{{ spinnerWidgetChat }}"></md-progress-linear>
+    <md-card-content style="overflow-y: scroll; height: 100%;padding-top:0px">
+      <div layout="row" layout-align="space-around center" ng-repeat="item in chats | orderBy:'-timestamp'">
+        <div flex="20">
+          <md-button style="" class="md-icon-button">
+            <md-icon md-font-set="material-icons"> {{item.bot?"android":"account_circle"}}</md-icon>
+          </md-button>
+          </div>
+            <div flex>
+              <p>{{item.text}}</p>
+            </div>
+        <md-divider ng-if="!$last"></md-divider>
+      </div>
+    </md-card-content>
+</md-card>

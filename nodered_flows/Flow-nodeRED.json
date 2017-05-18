@@ -1,0 +1,707 @@
+[
+    {
+        "id": "6fb4c58a.7860cc",
+        "type": "tab",
+        "label": "Twitter"
+    },
+    {
+        "id": "95c1413c.629c5",
+        "type": "tab",
+        "label": "Slack Bot"
+    },
+    {
+        "id": "a95d2b01.3f6ba8",
+        "type": "websocket-listener",
+        "z": "",
+        "path": "/livefeed",
+        "wholemsg": "true"
+    },
+    {
+        "id": "676b0307.f2d8bc",
+        "type": "twitter in",
+        "z": "6fb4c58a.7860cc",
+        "twitter": "",
+        "tags": "@ibmdp82, #ibmdp82",
+        "user": "false",
+        "name": "Twitter Feed",
+        "topic": "tweets",
+        "inputs": 0,
+        "x": 113.11112976074219,
+        "y": 451.5555782318115,
+        "wires": [
+            [
+                "f7128eac.c25b4"
+            ]
+        ]
+    },
+    {
+        "id": "c4fee9e.22f9818",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "twitter msg",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1725.9999313354492,
+        "y": 448.11113357543945,
+        "wires": []
+    },
+    {
+        "id": "a10bd208.1b046",
+        "type": "cloudant out",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "cloudant": "",
+        "database": "twitter_db",
+        "service": "ibmdp82-red-cloudantNoSQLDB",
+        "payonly": false,
+        "operation": "insert",
+        "x": 1569.2222290039062,
+        "y": 726.6667385101318,
+        "wires": []
+    },
+    {
+        "id": "f7128eac.c25b4",
+        "type": "delay",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 352.1111297607422,
+        "y": 452.5555782318115,
+        "wires": [
+            [
+                "eb52e8f3.fc0498",
+                "bd5282da.b2579",
+                "c4fee9e.22f9818",
+                "b93992bc.3282d"
+            ]
+        ]
+    },
+    {
+        "id": "eb52e8f3.fc0498",
+        "type": "watson-tone-analyzer-v3",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "tones": "all",
+        "sentences": "false",
+        "contentType": "false",
+        "x": 682.1111297607422,
+        "y": 573.5555782318115,
+        "wires": [
+            [
+                "33944599.f60f0a"
+            ]
+        ]
+    },
+    {
+        "id": "8fa3095c.8f4a38",
+        "type": "switch",
+        "z": "6fb4c58a.7860cc",
+        "name": "length check",
+        "property": "payload.length",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "3",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "outputs": 2,
+        "x": 812.1111297607422,
+        "y": 373.5555782318115,
+        "wires": [
+            [
+                "6c36375.a3269c8",
+                "59b50c87.809994"
+            ],
+            [
+                "3816f27d.5292fe"
+            ]
+        ]
+    },
+    {
+        "id": "6c36375.a3269c8",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "Location",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 982.1111297607422,
+        "y": 313.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "3816f27d.5292fe",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "No loc",
+        "active": false,
+        "console": "false",
+        "complete": "payload",
+        "x": 972.1111297607422,
+        "y": 393.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "59b50c87.809994",
+        "type": "http request",
+        "z": "6fb4c58a.7860cc",
+        "name": "request openstreetmap",
+        "method": "GET",
+        "url": "http://nominatim.openstreetmap.org/search?format=json&q={{payload}}&zoom=18&addressdetails=1",
+        "tls": "",
+        "x": 1032.1111297607422,
+        "y": 353.5555782318115,
+        "wires": [
+            [
+                "7753b1aa.a801e",
+                "508cbda2.c3fea4"
+            ]
+        ]
+    },
+    {
+        "id": "7753b1aa.a801e",
+        "type": "function",
+        "z": "6fb4c58a.7860cc",
+        "name": "parse lat/lng",
+        "func": "var input = JSON.parse(msg.payload)\nvar lat = input[0].lat;\nvar lng = input[0].lon;\nmsg.payload = lat + ',' + lng ;\nmsg.geo = {\"lat\":lat,\"lng\":lng};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1347.1111297607422,
+        "y": 352.5555782318115,
+        "wires": [
+            [
+                "cb839616.9db388",
+                "19887274.acf47e",
+                "4f6e03aa.790d7c"
+            ]
+        ]
+    },
+    {
+        "id": "508cbda2.c3fea4",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 1327.1111297607422,
+        "y": 312.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "cb839616.9db388",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "geo coordinates",
+        "active": true,
+        "console": "false",
+        "complete": "geo",
+        "x": 1757.1111297607422,
+        "y": 352.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "33944599.f60f0a",
+        "type": "template",
+        "z": "6fb4c58a.7860cc",
+        "name": "tone response  (text table)",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "\n{{#response.document_tone.tone_categories}}\n{{category_name}}\n------------------\n{{#tones}}\n{{tone_name}}       {{score}}\n{{/tones}}\n\n{{/response.document_tone.tone_categories}}\n",
+        "x": 932.1111297607422,
+        "y": 573.5555782318115,
+        "wires": [
+            [
+                "66093bff.ca1524"
+            ]
+        ]
+    },
+    {
+        "id": "66093bff.ca1524",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "tones",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 1727.1111297607422,
+        "y": 572.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "8c4989c2.d5c6b8",
+        "type": "inject",
+        "z": "6fb4c58a.7860cc",
+        "name": "Set testing Text",
+        "topic": "",
+        "payload": "Need another reason to be excited for tomorrow's #ibminterconnect keynote? Here's one: Will Smith will be there.",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 143.1111297607422,
+        "y": 571.5555782318115,
+        "wires": [
+            [
+                "f7128eac.c25b4"
+            ]
+        ]
+    },
+    {
+        "id": "bd5282da.b2579",
+        "type": "alchemy-feature-extract",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "page-image": false,
+        "image-kw": false,
+        "feed": false,
+        "entity": true,
+        "keyword": true,
+        "title": false,
+        "author": false,
+        "taxonomy": false,
+        "concept": false,
+        "relation": false,
+        "pub-date": false,
+        "doc-sentiment": true,
+        "doc-emotion": true,
+        "entity-sentiment": true,
+        "entity-emotion": true,
+        "x": 682.1111297607422,
+        "y": 633.5555782318115,
+        "wires": [
+            [
+                "f86c456d.51d6e8",
+                "79171a63.b32144"
+            ]
+        ]
+    },
+    {
+        "id": "f86c456d.51d6e8",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "Alchemy Features",
+        "active": true,
+        "console": "false",
+        "complete": "features",
+        "x": 1687.1111297607422,
+        "y": 632.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "60a5e5c6.7f0eac",
+        "type": "websocket out",
+        "z": "6fb4c58a.7860cc",
+        "name": "WebSocket Communication",
+        "server": "a95d2b01.3f6ba8",
+        "client": "",
+        "x": 1629.2222290039062,
+        "y": 766.6667385101318,
+        "wires": []
+    },
+    {
+        "id": "79171a63.b32144",
+        "type": "function",
+        "z": "6fb4c58a.7860cc",
+        "name": "add time",
+        "func": "msg.timestamp = Date.now();\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1409.2222290039062,
+        "y": 746.6667385101318,
+        "wires": [
+            [
+                "a10bd208.1b046",
+                "60a5e5c6.7f0eac"
+            ]
+        ]
+    },
+    {
+        "id": "b4aa84bb.2ed228",
+        "type": "http in",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "url": "/postFeedback",
+        "method": "post",
+        "swaggerDoc": "",
+        "x": 143.1111297607422,
+        "y": 671.5555782318115,
+        "wires": [
+            [
+                "19c83b02.4a56f5",
+                "4e583452.16524c",
+                "2aedd5b1.102fca"
+            ]
+        ]
+    },
+    {
+        "id": "d9ec3cc6.5f0f",
+        "type": "http response",
+        "z": "6fb4c58a.7860cc",
+        "name": "HTTP Response",
+        "x": 901.0000839233398,
+        "y": 746.8889789581299,
+        "wires": []
+    },
+    {
+        "id": "739eb2e7.f74f6c",
+        "type": "template",
+        "z": "6fb4c58a.7860cc",
+        "name": "HTTP Response",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "plain",
+        "template": "{ \"status\": \"OK\" }",
+        "x": 686.3334159851074,
+        "y": 745.777868270874,
+        "wires": [
+            [
+                "d9ec3cc6.5f0f"
+            ]
+        ]
+    },
+    {
+        "id": "19c83b02.4a56f5",
+        "type": "function",
+        "z": "6fb4c58a.7860cc",
+        "name": "Set CORS",
+        "func": "if (msg.req.headers.origin && /(.*eu-gb\\.mybluemix\\.net$)|(.*localhost.*)/.test(msg.req.headers.origin)) {\n    msg.headers = {\n    \"access-control-allow-origin\": msg.req.headers.origin \n    };\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350.3334159851074,
+        "y": 747.0000381469727,
+        "wires": [
+            [
+                "739eb2e7.f74f6c"
+            ]
+        ]
+    },
+    {
+        "id": "b93992bc.3282d",
+        "type": "function",
+        "z": "6fb4c58a.7860cc",
+        "name": "tweet.user.location > payload",
+        "func": "if( msg.tweet && msg.tweet.user && msg.tweet.user.location ){\n    msg.payload = msg.tweet.user.location;\n} else {\n    msg.payload = ''\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 582.1111297607422,
+        "y": 373.5555782318115,
+        "wires": [
+            [
+                "8fa3095c.8f4a38"
+            ]
+        ]
+    },
+    {
+        "id": "4e583452.16524c",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "true",
+        "x": 335.3334159851074,
+        "y": 786.0000381469727,
+        "wires": []
+    },
+    {
+        "id": "2aedd5b1.102fca",
+        "type": "function",
+        "z": "6fb4c58a.7860cc",
+        "name": "Strip HTTP metadata",
+        "func": "\nreturn { payload: msg.payload };",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 379.1111297607422,
+        "y": 631.5555782318115,
+        "wires": [
+            [
+                "bd5282da.b2579"
+            ]
+        ]
+    },
+    {
+        "id": "19887274.acf47e",
+        "type": "weather_insights",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "host": "twcservice.mybluemix.net",
+        "service": "/observations.json",
+        "geocode": "",
+        "units": "m",
+        "language": "de",
+        "x": 1537.1111297607422,
+        "y": 392.5555782318115,
+        "wires": [
+            [
+                "73b754ff.25280c"
+            ]
+        ]
+    },
+    {
+        "id": "73b754ff.25280c",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "observation",
+        "x": 1747.1111297607422,
+        "y": 392.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "33d0c24d.0e2b7e",
+        "type": "inject",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "topic": "",
+        "payload": "49.76951327,8.64675522",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 1300.4443836212158,
+        "y": 392.5555820465088,
+        "wires": [
+            [
+                "19887274.acf47e"
+            ]
+        ]
+    },
+    {
+        "id": "4f6e03aa.790d7c",
+        "type": "debug",
+        "z": "6fb4c58a.7860cc",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "false",
+        "x": 1527.1111297607422,
+        "y": 312.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "d3f2ffcf.c2f01",
+        "type": "comment",
+        "z": "6fb4c58a.7860cc",
+        "name": "Twitter - Feed ",
+        "info": "",
+        "x": 113.11112976074219,
+        "y": 291.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "88ffbe01.5fe23",
+        "type": "comment",
+        "z": "6fb4c58a.7860cc",
+        "name": "Watson Weather ",
+        "info": "",
+        "x": 536.5555877685547,
+        "y": 293.5555648803711,
+        "wires": []
+    },
+    {
+        "id": "8613c62d.da31a8",
+        "type": "comment",
+        "z": "6fb4c58a.7860cc",
+        "name": " Watson NLU Emotions Analyse",
+        "info": "",
+        "x": 733.1111297607422,
+        "y": 516.5555782318115,
+        "wires": []
+    },
+    {
+        "id": "8420c4f1.2a7868",
+        "type": "comment",
+        "z": "6fb4c58a.7860cc",
+        "name": "Bluemix DB & User Interface",
+        "info": "",
+        "x": 1465.9999465942383,
+        "y": 673.6667022705078,
+        "wires": []
+    },
+    {
+        "id": "2b7a67a7.9f44c8",
+        "type": "inject",
+        "z": "6fb4c58a.7860cc",
+        "name": "Test Location",
+        "topic": "",
+        "payload": "Hannover",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 627.6666870117188,
+        "y": 414.66668701171875,
+        "wires": [
+            [
+                "8fa3095c.8f4a38"
+            ]
+        ]
+    },
+    {
+        "id": "b79fbae5.395a38",
+        "type": "Slack Bot Out",
+        "z": "95c1413c.629c5",
+        "name": "bot out",
+        "apiToken": "xoxb-155907296099-bhmcMepauqxMOPcerqeyocIK",
+        "channel": "#cebit17bot",
+        "x": 1107,
+        "y": 482,
+        "wires": []
+    },
+    {
+        "id": "61eb8abf.2081e4",
+        "type": "Slack Bot In",
+        "z": "95c1413c.629c5",
+        "name": "Slack In ",
+        "apiToken": "xoxb-155907296099-bhmcMepauqxMOPcerqeyocIK",
+        "channel": "",
+        "x": 117,
+        "y": 482,
+        "wires": [
+            [
+                "da955c97.7361c",
+                "f3196848.202a58"
+            ]
+        ]
+    },
+    {
+        "id": "da955c97.7361c",
+        "type": "debug",
+        "z": "95c1413c.629c5",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 377,
+        "y": 422,
+        "wires": []
+    },
+    {
+        "id": "abe0585f.589978",
+        "type": "inject",
+        "z": "95c1413c.629c5",
+        "name": "",
+        "topic": "",
+        "payload": "Moin Slack",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 887,
+        "y": 422,
+        "wires": [
+            [
+                "b79fbae5.395a38"
+            ]
+        ]
+    },
+    {
+        "id": "f3196848.202a58",
+        "type": "watson-conversation-v1",
+        "z": "95c1413c.629c5",
+        "name": "bluemix - conversation",
+        "workspaceid": "16eb3003-0242-4e7a-8541-105bf03541c4",
+        "multiuser": false,
+        "context": true,
+        "x": 407,
+        "y": 482,
+        "wires": [
+            [
+                "d3db18f9.30c368",
+                "8cfa54b9.135b78"
+            ]
+        ]
+    },
+    {
+        "id": "d3db18f9.30c368",
+        "type": "function",
+        "z": "95c1413c.629c5",
+        "name": "Configure Chat output WATSON text",
+        "func": "var text =  msg.payload.output.text[0];\n\nmsg.payload = text;\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 737,
+        "y": 482,
+        "wires": [
+            [
+                "b79fbae5.395a38",
+                "85dadbb7.b8df28"
+            ]
+        ]
+    },
+    {
+        "id": "8cfa54b9.135b78",
+        "type": "debug",
+        "z": "95c1413c.629c5",
+        "name": "",
+        "active": false,
+        "console": "false",
+        "complete": "true",
+        "x": 637,
+        "y": 422,
+        "wires": []
+    },
+    {
+        "id": "f09e0b6a.38a088",
+        "type": "inject",
+        "z": "95c1413c.629c5",
+        "name": "",
+        "topic": "",
+        "payload": "Hello Bot",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "x": 147,
+        "y": 422,
+        "wires": [
+            [
+                "f3196848.202a58"
+            ]
+        ]
+    },
+    {
+        "id": "85dadbb7.b8df28",
+        "type": "debug",
+        "z": "95c1413c.629c5",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "false",
+        "x": 1117,
+        "y": 422,
+        "wires": []
+    },
+    {
+        "id": "86707fdc.435b",
+        "type": "comment",
+        "z": "95c1413c.629c5",
+        "name": "Bot Watson conversation",
+        "info": "",
+        "x": 119,
+        "y": 351,
+        "wires": []
+    }
+]

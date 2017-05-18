@@ -1,0 +1,16 @@
+{
+  "name": "dashboard",
+  "description": "A fancy dashboard made with Bluemix.",
+  "dependencies": {
+    "angular-material": "1.0.9",
+    "jquery": "*",
+    "tether": "*",
+    "angular-route": "*",
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#1.7.0",
+    "angular-gridster": "0.13.10",
+    "angular-sanitize": "^1.6.3"
+  },
+  "resolutions": {
+    "angular": "~1.5.6"
+  }
+}

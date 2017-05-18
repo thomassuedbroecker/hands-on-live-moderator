@@ -1,0 +1,13 @@
+
+<div data-gridster>
+    <ul>
+        <li data-gridster-item data-row="item.position[0]" data-col="item.position[1]" data-sizex="item.size.x"
+            data-sizey="item.size.y" max_size_x="item.max.x" max_size_y="item.max.y" min_size_x="item.min.x"
+            min_size_y="item.min.y" ng-switch on="item.widget" ng-repeat="item in dashboard">
+            <widget-feed ng-switch-when="feed" id="{{item.id}}"></widget-feed>
+            <widget-chat ng-switch-when="chat" id="{{item.id}}"></widget-chat>
+            <widget-market ng-switch-when="market" id="{{item.id}}"></widget-market>
+            <widget-about ng-switch-when="about" id="{{item.id}}"></widget-about>
+        </li>
+    </ul>
+</div>

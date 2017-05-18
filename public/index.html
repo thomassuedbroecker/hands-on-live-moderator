@@ -1,0 +1,58 @@
+
+<html lang="en">
+<head>
+    <title>I&S-Live</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Include Libraries -->
+    <link rel="stylesheet" href="lib/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="lib/angular-hotkeys/build/hotkeys.min.css">
+    <link rel="stylesheet" href="lib/angular-gridster/dist/angular-gridster.min.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Include own stylesheet -->
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body ng-app="bdd" ng-cloak layout="column">
+
+<!-- Include the navigation -->
+<div ng-include="'templates/general/toolbar.html'"></div>
+
+<md-content flex layout-padding>
+
+    <!-- Include the content -->
+    <div ng-view></div>
+
+    <!-- Include the footer -->
+    <div ng-include="'templates/general/footer.html'"></div>
+
+</md-content>
+
+<md-progress-circular id="spinner" md-mode="{{ spinnerMode }}" md-diameter="96"></md-progress-circular>
+
+<!-- Include Libraries -->
+<script src="lib/angular/angular.min.js"></script>
+<script src="lib/jquery/dist/jquery.min.js"></script>
+<script src="lib/angular-animate/angular-animate.min.js"></script>
+<script src="lib/angular-aria/angular-aria.min.js"></script>
+<script src="lib/angular-messages/angular-messages.min.js"></script>
+<script src="lib/angular-material/angular-material.min.js"></script>
+<script src="lib/angular-route/angular-route.min.js"></script>
+<script src="lib/angular-hotkeys/build/hotkeys.min.js"></script>
+<script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
+<script src="lib/javascript-detect-element-resize/jquery.resize.js"></script>
+<script src="lib/angular-gridster/dist/angular-gridster.min.js"></script>
+<script src="https://maps.google.com/maps/api/js?sensor=false"></script>
+
+<!-- Include own javascript -->
+<script src="js/app.js"></script>
+<script src="js/factory/factoryFeedSocket.js"></script>
+<script src="js/general/controllerToolbarMenu.js"></script>
+<script src="js/dashboard/controllerDashboard.js"></script>
+
+
+<!-- Include directives -->
+<script src="js/directive/directiveFeed.js"></script>
+<script src="js/directive/directiveChat.js"></script>
+<script src="js/directive/directiveMarket.js"></script>
+
+</body>
+</html>

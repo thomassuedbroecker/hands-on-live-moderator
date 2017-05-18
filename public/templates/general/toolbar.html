@@ -1,0 +1,38 @@
+
+<div ng-controller="controllerToolbarMenu">
+    <md-toolbar class="md-clickable">
+        <div class="md-toolbar-tools">
+            <md-button aria-label="dashboard" class="md-icon-button" ng-click="openHome()">
+                <md-icon md-svg-src="img/bluemix.svg"
+                         aria-label="Bluemix digital dashboard"></md-icon>
+            </md-button>
+            <h3>
+                <span hide show-gt-sm>Innovation and Speed Live Moderator</span>
+                <span hide 	show-sm>I&S-Live</span>
+            </h3>
+            <span flex id="toolbar-search">
+                <md-autocomplete md-no-float flex
+                                 md-selected-item="selectedItem"
+                                 md-search-text="searchText"
+                                 md-items="item in widgets | filter:searchText"
+                                 md-item-text="item.name"
+                                 md-min-length="0"
+                                 placeholder="Suche..."
+                                 ng-keypress="($event.which === 13)?openWeb(searchText):0">
+                    <md-item-template>
+                        <md-icon md-font-set="material-icons"> {{item.icon}}</md-icon>
+                        <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.name}}</span>
+                    </md-item-template>
+                </md-autocomplete>
+            </span>
+            <md-button ng-click="changeEditMode()" aria-label="Dashboard editieren" class="md-icon-button" id="editMode">
+                <md-icon md-font-set="material-icons"> edit</md-icon>
+                <md-tooltip md-direction="bottom">Dashboard editieren</md-tooltip>
+            </md-button>
+            <md-button ng-click="addWidget()" aria-label="Widget hinzufügen" class="md-icon-button" id="addWidget">
+                <md-icon md-font-set="material-icons"> add_box</md-icon>
+                <md-tooltip md-direction="bottom">Widget hinzufügen</md-tooltip>
+            </md-button>
+        </div>
+    </md-toolbar>
+</div>

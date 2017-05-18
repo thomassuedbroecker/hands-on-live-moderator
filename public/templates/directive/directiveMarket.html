@@ -1,0 +1,23 @@
+<md-card class="clickable">
+    <md-card-title-text style="min-height: 40px;">
+        <div layout="row">
+            <div flex="35">
+                <md-icon md-font-set="material-icons" style="line-height: 40px; padding-left: 15px"> shopping_cart</md-icon>
+            </div>
+            <div flex="65" style="padding-top: 12px;">
+                <span>cognitive Market</span>
+            </div>
+            <div>
+                <md-button class="md-icon-button" aria-label="Delete Widget" ng-click="deleteWidget()"
+                           style="margin-right: 30px" ng-shosw="editMode">
+                    <md-icon md-font-set="material-icons"> clear</md-icon>
+                    <md-tooltip md-direction="bottom">Widget löschen</md-tooltip>
+                </md-button>
+            </div>
+        </div>
+        <p></p>
+    </md-card-title-text>
+    <md-divider></md-divider>
+    <md-card-content ng-click="openMarket()" style="height: 100%">
+    </md-card-content>
+</md-card>
